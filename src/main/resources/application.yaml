@@ -1,0 +1,49 @@
+spring:
+  application:
+    name: spring-security-demo
+  profiles:
+    active: "@runtime.env@"
+  security:
+    oauth2:
+      resourceserver:
+        test-oauth:
+          issuer-uri: http://localhost:8080/realms/test-oauth
+          introspection-uri: http://localhost:8080/realms/test-oauth/protocol/openid-connect/token/introspect
+          client-id: demo-api
+          client-secret: lRGaYKkDk0IJ7Q1aWk8HgTFY2nTcI7VM
+      client:
+        provider:
+          test-oauth:
+            issuer-uri: http://localhost:8080/realms/test-oauth
+            token-uri: http://localhost:8080/realms/test-oauth/protocol/openid-connect/token
+            user-info-uri: http://localhost:8080/realms/test-oauth/protocol/openid-connect/userinfo
+            introspection-uri: http://localhost:8080/realms/test-oauth/protocol/openid-connect/token/introspect
+            jwks_uri: http://localhost:8080/realms/test-oauth/protocol/openid-connect/certs
+            logout-uri: http://localhost:8080/realms/test-oauth/protocol/openid-connect/logout
+        registration:
+          test-oauth:
+            provider: test-oauth
+            client-id: demo-api
+            client-secret: lRGaYKkDk0IJ7Q1aWk8HgTFY2nTcI7VM
+            redirect-uri: "{baseUrl}/login/oauth2/code/test-oauth"
+            scope: openid,profile,email
+            authorization-grant-type: authorization_code
+
+springdoc:
+  show-login-endpoint: false
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+        web:
+          client:
+            RestTemplate: DEBUG
+
+server:
+  port : 8081
+
+  app:
+    redirect:
+      login-url: "http://localhost:5173/login"
