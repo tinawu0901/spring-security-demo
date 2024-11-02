@@ -107,11 +107,10 @@ public class SecurityConfiguration {
 
     /***
      *formlogin 配置user&password
-     *
+     *簡易的儲存帳密
      */
     @Bean
     public InMemoryUserDetailsManager userDetailsService(BCryptPasswordEncoder bCryptPasswordEncoder) {
-
         UserDetails userDetails = User.builder()
                 .username("user")
                 .password(bCryptPasswordEncoder.encode("user"))
@@ -123,6 +122,7 @@ public class SecurityConfiguration {
     /**
      * DaoAuthenticationProvider is an AuthenticationProvider implementation that uses a UserDetailsService and PasswordEncoder to authenticate a username and password.
      *https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/dao-authentication-provider.html
+     * 如果不行可以自己實作AuthenticationProvider來做自定義認證
      */
     @Bean
     public AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService) {
