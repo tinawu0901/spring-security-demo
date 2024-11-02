@@ -44,6 +44,6 @@ logging:
 server:
   port : 8081
 
-  app:
+app:
     redirect:
       login-url: "http://localhost:5173/login"

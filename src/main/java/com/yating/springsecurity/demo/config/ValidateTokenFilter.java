@@ -35,6 +35,14 @@ public class ValidateTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
+        // Skip token validation if the user is already authenticated (e.g., through username-based login)
+        Authentication existingAuth = SecurityContextHolder.getContext().getAuthentication();
+        if (existingAuth != null && existingAuth.isAuthenticated()) {
+            log.info("User is already authenticated with username-based login, skipping token validation");
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         String accessToken = extractTokenFromCookie(request, "access_token");
         String refreshToken = extractTokenFromCookie(request, "refresh_token");
         log.info("Token validation filter triggered");

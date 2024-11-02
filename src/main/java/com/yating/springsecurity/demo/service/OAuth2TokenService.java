@@ -6,6 +6,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
+import org.springframework.security.oauth2.client.OAuth2AuthorizeRequest;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -28,6 +33,8 @@ public class OAuth2TokenService {
 
     @Autowired
     private RestTemplate restTemplate;
+    @Autowired
+    private  OAuth2AuthorizedClientManager authorizedClientManager;
 
     public String refreshAccessToken(String refreshToken) {
         String requestBody = String.format("grant_type=refresh_token&client_id=%s&client_secret=%s&refresh_token=%s",
@@ -85,6 +92,23 @@ public class OAuth2TokenService {
             log.error("Logout failed: " + e.getMessage(), e); // 記錄錯誤堆棧跟蹤
             return false;
         }
+    }
+    public String getAccessToken(OAuth2AuthenticationToken authenticationToken) {
+        OAuth2AuthorizeRequest authorizeRequest = OAuth2AuthorizeRequest
+                .withClientRegistrationId(authenticationToken.getAuthorizedClientRegistrationId())
+                .principal(authenticationToken)
+                .build();
+
+        // Request the client
+        OAuth2AuthorizedClient authorizedClient = authorizedClientManager.authorize(authorizeRequest);
+
+        // Retrieve the access token
+        if (authorizedClient != null) {
+            OAuth2AccessToken accessToken = authorizedClient.getAccessToken();
+            return accessToken != null ? accessToken.getTokenValue() : null;
+        }
+
+        return null;
     }
 
 }
