@@ -3,7 +3,28 @@ spring:
     name: spring-security-demo
   profiles:
     active: "@runtime.env@"
+  ldap:
+    url: ldap://localhost:8389
+    base: dc=example,dc=com
+    username: cn=admin,dc=example,dc=org
+    password: admin
   security:
+    saml2:
+      relyingparty:
+        registration:
+          test-oauth: # 对应 Keycloak 的 Client ID
+            identityprovider:
+              entity-id: "http://localhost:8080/realms/test-oauth"
+              verification.credentials:
+                - certificate-location: "classpath:keycloak.crt"
+              singlesignon.url: "http://localhost:8080/realms/test-oauth/protocol/saml"
+              singlesignon.sign-request: false
+            signing:
+              credentials:
+                - private-key-location: "classpath:rp.key"
+                  certificate-location: "classpath:keycloak.crt"
+            assertingparty:
+              metadata-uri: "http://localhost:8080/realms/test-oauth/protocol/saml/descriptor"
     oauth2:
       resourceserver:
         test-oauth:
@@ -34,16 +55,17 @@ springdoc:
 
 logging:
   level:
-    org:
-      springframework:
-        security: DEBUG
-        web:
-          client:
-            RestTemplate: DEBUG
+    org.springframework.security: TRACE
+    org.springframework.security.saml2: TRACE
+    org.opensaml: TRACE
+
 
 server:
   port : 8081
 
 app:
     redirect:
-      login-url: "http://localhost:5173/login"
+      login-url: "http://localhost:8081/user/userInfo"
+#saml:
+#  metadata:
+#    url: "http://localhost:8080/realms/test-oauth/protocol/saml/descriptor"

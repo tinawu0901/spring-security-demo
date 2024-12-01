@@ -18,7 +18,5 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         log.info("Authentication error: {}", authException.getMessage());
         response.sendRedirect("/login");
 
-//            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
-
     }
 }

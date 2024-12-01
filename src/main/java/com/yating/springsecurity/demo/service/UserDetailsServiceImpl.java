@@ -1,6 +1,7 @@
 package com.yating.springsecurity.demo.service;
 
 import com.yating.springsecurity.demo.dto.CustomUser;
+import com.yating.springsecurity.demo.enumeration.LoginMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,7 +32,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 passwordEncoder.encode("user"),
                 List.of(new SimpleGrantedAuthority("ROLE_USER")),
                 null,
-                false
+                false,
+                LoginMethod.CUSTOM // 設置為自定義帳號密碼
         ));
 
         users.put("user2", new CustomUser(
@@ -39,7 +41,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 passwordEncoder.encode("user2"),
                 List.of(new SimpleGrantedAuthority("ROLE_USER")),
                 null,
-                false
+                false,
+                LoginMethod.CUSTOM // 設置為自定義帳號密碼
         ));
 
         users.put("admin", new CustomUser(
@@ -47,7 +50,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 passwordEncoder.encode("adminpass"),
                 List.of(new SimpleGrantedAuthority("ROLE_ADMIN")),
                 "totp-secret-admin",
-                true
+                true,
+                LoginMethod.CUSTOM // 設置為自定義帳號密碼
         ));
     }
 
@@ -66,8 +70,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 username,
                 passwordEncoder.encode(password),
                 List.of(new SimpleGrantedAuthority("ROLE_USER")),
-                "totp-secret",  // 您的 TOTP 秘鑰
-                useMFE
+                "totp-secret",  // 假設從其他地方獲取 TOTP 密鑰
+                useMFE,
+                LoginMethod.CUSTOM // 設置為自定義登錄方式
         );
         users.put(username, user);
     }

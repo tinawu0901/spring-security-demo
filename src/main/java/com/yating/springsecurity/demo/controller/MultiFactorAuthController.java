@@ -1,12 +1,20 @@
 package com.yating.springsecurity.demo.controller;
 
+import com.yating.springsecurity.demo.dto.CustomBearerTokenAuthentication;
+
+import com.yating.springsecurity.demo.dto.CustomSaml2Authentication;
 import com.yating.springsecurity.demo.dto.CustomUser;
+import com.yating.springsecurity.demo.enumeration.LoginMethod;
 import com.yating.springsecurity.demo.service.GAService;
 import com.yating.springsecurity.demo.service.UserDetailsServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
+import org.springframework.security.oauth2.server.resource.authentication.BearerTokenAuthentication;
+import org.springframework.security.saml2.provider.service.authentication.Saml2Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,25 +34,49 @@ public class MultiFactorAuthController {
     @Autowired
     private GAService gaService; // 引入 GAService
 
-
     @RequestMapping("/user/userInfo")
     public String userInfo(Model model, Principal principal) {
-        // 獲取當前用戶的名稱
-        String username = principal.getName();
 
-        // 從 UserDetailsServiceImpl 中獲取 CustomUser
-        CustomUser customUser = (CustomUser) userDetailsServiceImpl.loadUserByUsername(username);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUser customUser = null;
 
+        // 根据 Authentication 类型提取 CustomUser
+        if (authentication instanceof CustomSaml2Authentication) {
+            // SAML2 登录类型
+            CustomSaml2Authentication customSaml2Auth = (CustomSaml2Authentication) authentication;
+            customUser = customSaml2Auth.getCustomUser();
+        } else if (authentication instanceof BearerTokenAuthentication) {
+
+            BearerTokenAuthentication bearerTokenAuth = (BearerTokenAuthentication) authentication;
+
+            // 获取 OAuth2AuthenticatedPrincipal 和 OAuth2AccessToken
+            OAuth2AuthenticatedPrincipal oauthPrincipal = (OAuth2AuthenticatedPrincipal) bearerTokenAuth.getPrincipal();
+
+            // 创建 CustomUser 对象
+            customUser = new CustomUser(
+                    oauthPrincipal.getName(),       // 获取用户名
+                    null,                           // 其他属性
+                    null,                           // 可设置其他属性
+                    null,                           // TOTP key 初始化
+                    false,                          // useMFE flag
+                    LoginMethod.OAuth2              // 设置登录方式为 OAuth2
+            );
+
+        } else if (authentication.getPrincipal() instanceof CustomUser) {
+            // 数据库或 LDAP 登录类型
+            customUser = (CustomUser) authentication.getPrincipal();
+        }
         if (customUser != null) {
             log.info("CustomUser: {}", customUser);
             model.addAttribute("username", customUser.getUsername());
             model.addAttribute("useMFE", customUser.isUseMFE());
+            model.addAttribute("loginMethod", customUser.getLoginMethod());
             return "userInfo";
         } else {
-            // 處理未找到 CustomUser 的情況，重定向到登入頁面
             return "redirect:/login?error=notAuthenticated";
         }
     }
+
 
     @PostMapping("/enableMFE")
     public String enableMFE(@RequestParam String username, Model model) {

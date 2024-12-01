@@ -1,5 +1,6 @@
 package com.yating.springsecurity.demo.dto;
 
+import com.yating.springsecurity.demo.enumeration.LoginMethod;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,6 +13,8 @@ public class CustomUser implements UserDetails {
     private Collection<? extends GrantedAuthority> authorities;
     private String totpSecret; // 用于存储 TOTP 密钥
     private boolean useMFE; // 表示用户是否需要使用 MFE
+
+     private LoginMethod loginMethod;  // 用于记录用户的登录方式
 
      public void setUsername(String username) {
          this.username = username;
@@ -29,13 +32,16 @@ public class CustomUser implements UserDetails {
          this.useMFE = useMFE;
      }
 
-     public CustomUser(String username, String password, Collection<? extends GrantedAuthority> authorities, String totpSecret, boolean useMFE) {
-        this.username = username;
-        this.password = password;
-        this.authorities = authorities;
-        this.totpSecret = totpSecret;
-        this.useMFE = useMFE;
-    }
+     public CustomUser(String username, String password, Collection<? extends GrantedAuthority> authorities,
+                       String totpSecret, boolean useMFE, LoginMethod loginMethod) {
+         this.username = username;
+         this.password = password;
+         this.authorities = authorities;
+         this.totpSecret = totpSecret;
+         this.useMFE = useMFE;
+         this.loginMethod = loginMethod;  // 新增 loginMethod 参数
+     }
+
 
     public String getTotpSecret() {
         return totpSecret;
@@ -44,6 +50,14 @@ public class CustomUser implements UserDetails {
     public boolean isUseMFE() {
         return useMFE;
     }
+
+     public LoginMethod getLoginMethod() {
+         return loginMethod;
+     }
+
+     public void setLoginMethod(LoginMethod loginMethod) {
+         this.loginMethod = loginMethod;
+     }
 
     // 实现 UserDetails 的其他方法
     @Override
@@ -70,6 +84,8 @@ public class CustomUser implements UserDetails {
     public boolean isAccountNonLocked() {
         return true;
     }
+
+
 
     @Override
     public boolean isCredentialsNonExpired() {

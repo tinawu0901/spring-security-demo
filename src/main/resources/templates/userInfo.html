@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Info</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .button {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+        }
+        .button:hover {
+            background-color: #2980b9;
+        }
+        .qr-code {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+        .input-field {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>User Information</h1>
+
+    <!-- 錯誤信息 -->
+    <div th:if="${error}" class="error" th:text="${error}"></div>
+
+    <p><strong>Username:</strong> <span th:text="${username}"></span></p>
+    <p><strong>Use MFE:</strong> <span th:text="${useMFE} ? 'Yes' : 'No'"></span></p>
+    <!-- 顯示 LoginMethod -->
+    <p><strong>Login Method:</strong> <span th:text="${loginMethod}"></span></p>
+
+    <div th:if="${useMFE}">
+        <p>Your MFE is currently enabled. If you wish to disable it, please contact support.</p>
+    </div>
+
+    <!-- 啟用 MFE 的表單 -->
+    <form action="#" th:action="@{/enableMFE}" method="post">
+        <input type="hidden" name="username" th:value="${username}"/>
+        <button type="submit" class="button">Enable MFE</button>
+    </form>
+
+
+    <!-- 登出按鈕 -->
+    <form action="#" th:action="@{/logout}" method="post" style="margin-top: 20px;">
+        <button type="submit" class="button">Logout</button>
+    </form>
+</div>
+
+</body>
+</html>

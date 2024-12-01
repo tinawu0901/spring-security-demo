@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logout Test</title>
+    <style>
+        /* 简单的样式 */
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .button {
+            background-color: #4CAF50; /* 绿色背景 */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .button:hover {
+            background-color: #45a049; /* 鼠标悬停时变成稍微深一些的绿色 */
+        }
+    </style>
+</head>
+<body>
+<h2>Welcome to the Logout Page</h2>
+<p>You can log out by clicking the button below:</p>
+
+<!-- 这是用于注销的表单 -->
+<form action="#" th:action="@{/logout}" method="post" style="margin-top: 20px;">
+    <button type="submit" class="button">Logout</button>
+</form>
+
+</body>
+</html>

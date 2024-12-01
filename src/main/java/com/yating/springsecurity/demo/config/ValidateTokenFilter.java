@@ -98,7 +98,6 @@ public class ValidateTokenFilter extends OncePerRequestFilter {
         log.error("Token is null");
         SecurityContextHolder.clearContext();
         throw new AccessDeniedException("Access denied: Unauthorized access attempt.");
-//        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized - No token found");
     }
 
     private String extractTokenFromCookie(HttpServletRequest request, String cookieName) {

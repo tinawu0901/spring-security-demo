@@ -1,5 +1,8 @@
 package com.yating.springsecurity.demo.config;
 
+import com.yating.springsecurity.demo.dto.CustomBearerTokenAuthentication;
+import com.yating.springsecurity.demo.dto.CustomUser;
+import com.yating.springsecurity.demo.enumeration.LoginMethod;
 import com.yating.springsecurity.demo.enumeration.TokenType;
 import com.yating.springsecurity.demo.util.AuthCommonUtil;
 import jakarta.servlet.ServletException;
@@ -11,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -36,11 +40,9 @@ public class CustomOAuth2LoginSuccessHandler implements AuthenticationSuccessHan
                                         Authentication authentication) throws IOException, ServletException {
 
         OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) authentication;
+
         OAuth2AuthorizedClient authorizedClient = authorizedClientService
                 .loadAuthorizedClient(oauthToken.getAuthorizedClientRegistrationId(), oauthToken.getName());
-        OidcUser principal = (OidcUser) authentication.getPrincipal();
-
-        logUserInfo(principal);
 
         String accessToken = authorizedClient.getAccessToken().getTokenValue();
         String refreshToken = authorizedClient.getRefreshToken() != null
@@ -52,15 +54,10 @@ public class CustomOAuth2LoginSuccessHandler implements AuthenticationSuccessHan
         response.setContentType("application/json");
         response.setStatus(HttpServletResponse.SC_OK); // 200 OK
 
-        response.sendRedirect(loginUrl);
+        String redirectUrl = "/user/userInfo";
+        response.sendRedirect(redirectUrl);
     }
 
-    private void logUserInfo(OidcUser principal) {
-        String username = principal.getPreferredUsername();
-        Collection<? extends GrantedAuthority> roles = principal.getAuthorities();
-
-        roles.forEach(role -> log.info("User role: " + role.getAuthority()));
-    }
 
     private void addCookiesToResponse(HttpServletResponse response, String accessToken, String refreshToken) {
 
