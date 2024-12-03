@@ -67,7 +67,6 @@ public class ValidateTokenFilter extends OncePerRequestFilter {
                 handleRefreshToken(refreshToken, response);
             } else {
                 throw new AccessDeniedException("Access token is invalid and no refresh token available.");
-//            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Access token is invalid and no refresh token available.");
             }
         }
     }
@@ -87,10 +86,8 @@ public class ValidateTokenFilter extends OncePerRequestFilter {
             }
             SecurityContextHolder.clearContext();
             throw new AccessDeniedException("Refresh token is invalid or expired.");
-//            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Refresh token is invalid or expired.");
         } catch (Exception refreshException) {
             throw new AccessDeniedException("Refresh token is invalid or expired.");
-//            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Refresh token is invalid or expired.");
         }
     }
 

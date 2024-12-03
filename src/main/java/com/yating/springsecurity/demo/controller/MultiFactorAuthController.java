@@ -40,30 +40,30 @@ public class MultiFactorAuthController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUser customUser = null;
 
-        // 根据 Authentication 类型提取 CustomUser
+
         if (authentication instanceof CustomSaml2Authentication) {
-            // SAML2 登录类型
+
             CustomSaml2Authentication customSaml2Auth = (CustomSaml2Authentication) authentication;
             customUser = customSaml2Auth.getCustomUser();
         } else if (authentication instanceof BearerTokenAuthentication) {
 
             BearerTokenAuthentication bearerTokenAuth = (BearerTokenAuthentication) authentication;
 
-            // 获取 OAuth2AuthenticatedPrincipal 和 OAuth2AccessToken
+
             OAuth2AuthenticatedPrincipal oauthPrincipal = (OAuth2AuthenticatedPrincipal) bearerTokenAuth.getPrincipal();
 
-            // 创建 CustomUser 对象
+
             customUser = new CustomUser(
-                    oauthPrincipal.getName(),       // 获取用户名
-                    null,                           // 其他属性
-                    null,                           // 可设置其他属性
-                    null,                           // TOTP key 初始化
-                    false,                          // useMFE flag
-                    LoginMethod.OAuth2              // 设置登录方式为 OAuth2
+                    oauthPrincipal.getName(),      
+                    null,                      
+                    null,                    
+                    null,                         
+                    false,                      
+                    LoginMethod.OAuth2              
             );
 
         } else if (authentication.getPrincipal() instanceof CustomUser) {
-            // 数据库或 LDAP 登录类型
+
             customUser = (CustomUser) authentication.getPrincipal();
         }
         if (customUser != null) {
@@ -84,30 +84,29 @@ public class MultiFactorAuthController {
         CustomUser customUser = (CustomUser) userDetailsServiceImpl.loadUserByUsername(username);
 
         if (customUser == null) {
-            // 處理用戶未找到的情況
+ 
             model.addAttribute("error", "User not found");
-            return "error"; // 返回錯誤頁面
+            return "error"; 
         }
 
-        String secret = customUser.getTotpSecret(); // 獲取用戶的 TOTP 秘鑰
+        String secret = customUser.getTotpSecret();
 
         if (secret == null || secret.isEmpty()) {
-            // 如果用戶尚未設置 TOTP 秘鑰，則生成一個新的秘鑰
+   
             secret = gaService.generateKey();
-            customUser.setTotpSecret(secret); // 設置用戶的 TOTP 秘鑰
+            customUser.setTotpSecret(secret);
 
-            // 生成 QR Code 的 URL
             String qrUrl = gaService.generateQRUrl(secret, username);
             if (qrUrl == null) {
                 model.addAttribute("error", "Error generating QR Code");
-                return "error"; // 返回錯誤頁面
+                return "error"; 
             }
 
-            // 在模型中添加 QR Code
+    
             model.addAttribute("qrCode", qrUrl);
             model.addAttribute("username", username);
-            model.addAttribute("useMFE", customUser.isUseMFE()); // 當前還沒有啟用 MFE
-            return "enableMFE"; // 返回新的 enableMFE 頁面
+            model.addAttribute("useMFE", customUser.isUseMFE()); 
+            return "enableMFE"; 
         }
 
         // 如果已經設置了秘鑰，則不顯示 QR Code

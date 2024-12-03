@@ -6,15 +6,15 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
- // 此注解將生成所有的 getter 和 setter 方法
+
 public class CustomUser implements UserDetails {
     private String username;
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
-    private String totpSecret; // 用于存储 TOTP 密钥
-    private boolean useMFE; // 表示用户是否需要使用 MFE
+    private String totpSecret;
+    private boolean useMFE; 
 
-     private LoginMethod loginMethod;  // 用于记录用户的登录方式
+     private LoginMethod loginMethod; 
 
      public void setUsername(String username) {
          this.username = username;
@@ -39,7 +39,7 @@ public class CustomUser implements UserDetails {
          this.authorities = authorities;
          this.totpSecret = totpSecret;
          this.useMFE = useMFE;
-         this.loginMethod = loginMethod;  // 新增 loginMethod 参数
+         this.loginMethod = loginMethod;
      }
 
 
@@ -59,7 +59,7 @@ public class CustomUser implements UserDetails {
          this.loginMethod = loginMethod;
      }
 
-    // 实现 UserDetails 的其他方法
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;

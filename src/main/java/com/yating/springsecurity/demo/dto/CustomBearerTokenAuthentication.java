@@ -23,13 +23,10 @@ public class CustomBearerTokenAuthentication  extends BearerTokenAuthentication 
         this.customUser = customUser;
     }
 
-    // 获取自定义的 CustomUser
+
     public CustomUser getCustomUser() {
         return customUser;
     }
 
-//    @Override
-//    public Map<String, Object> getAttributes() {
-//        return super.getTokenAttributes();
-//    }
+
 }

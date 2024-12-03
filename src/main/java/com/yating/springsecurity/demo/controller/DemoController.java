@@ -56,11 +56,11 @@ public class DemoController {
         BearerTokenAuthentication bearerTokenAuthentication = (BearerTokenAuthentication) authentication;
          String accessToken  = bearerTokenAuthentication.getToken().getTokenValue();
 
-        // 获取 OAuth2AuthorizedClient
+ 
         OAuth2AuthorizedClient authorizedClient = authorizedClientService.loadAuthorizedClient(
                 "test-oauth", bearerTokenAuthentication.getName());
 
-        // 检查是否有 refresh_token
+
         String refreshToken = null;
         if (authorizedClient != null && authorizedClient.getRefreshToken() != null) {
             refreshToken = authorizedClient.getRefreshToken().getTokenValue();
@@ -101,21 +101,11 @@ public class DemoController {
         // Load OAuth2AuthorizedClient
         OAuth2AuthorizedClient authorizedClient = authorizedClientService.loadAuthorizedClient(
                 "test-oauth", bearerTokenAuthentication.getName());
-//
-//        // Check if authorizedClient is null
-//        if (authorizedClient == null) {
-////            logger.error("Authorized client is null for principal: {}", bearerTokenAuthentication.getName());
-//            throw new IllegalStateException("Authorized client not found.");
-//        }
 
         ClientRegistration clientRegistration = clientRegistrationRepository.findByRegistrationId("test-oauth");
         OAuth2AccessToken accessToken = new OAuth2AccessToken(OAuth2AccessToken.TokenType.BEARER, accessTokenValue, null, null);
         // Get refresh token
         OAuth2RefreshToken refreshToken = new OAuth2RefreshToken(refreshTokenValue, null);
-//        if (refreshToken == null) {
-////            throw new IllegalStateException("Refresh token is not available.");
-//            refreshToken = new OAuth2RefreshToken(refreshTokenValue, null);
-//        }
 
         // Create refresh token request
         OAuth2RefreshTokenGrantRequest grantRequest = new OAuth2RefreshTokenGrantRequest(
@@ -142,6 +132,6 @@ public class DemoController {
                 return parts[1];
             }
         }
-        return null; // 若未找到 token，返回 null
+        return null; 
     }
 }

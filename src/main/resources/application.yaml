@@ -12,7 +12,7 @@ spring:
     saml2:
       relyingparty:
         registration:
-          test-oauth: # 对应 Keycloak 的 Client ID
+          test-oauth: 
             identityprovider:
               entity-id: "http://localhost:8080/realms/test-oauth"
               verification.credentials:
@@ -66,6 +66,3 @@ server:
 app:
     redirect:
       login-url: "http://localhost:8081/user/userInfo"
-#saml:
-#  metadata:
-#    url: "http://localhost:8080/realms/test-oauth/protocol/saml/descriptor"
