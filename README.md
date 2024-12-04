@@ -38,6 +38,48 @@
 4. 啟動 Spring Boot 專案  
 
     `mvn spring-boot:run`
+## 畫面
+
+1. 登入頁面
+![image](https://github.com/tinawu0901/spring-security-demo/blob/main/src/main/resources/image/LoginPage.png)
+
+2. 客製化方式登入
+![image](https://github.com/tinawu0901/spring-security-demo/blob/main/src/main/resources/image/CuStomUserInfo.png)
+- 啟動MFE
+![image](https://github.com/tinawu0901/spring-security-demo/blob/main/src/main/resources/image/EnableMFE.png)
+- 驗證成功並成功開啟
+![image](https://github.com/tinawu0901/spring-security-demo/blob/main/src/main/resources/image/EnableMFESucees.png)
+- 重新登入後須進行驗證
+![image](https://github.com/tinawu0901/spring-security-demo/blob/main/src/main/resources/image/MFEValidated.png)
+
+3. LDAP方式登入
+
+![image](https://github.com/tinawu0901/spring-security-demo/blob/main/src/main/resources/image/LDAPUserInfo.png)
+
+4. Saml2方式登入
+
+- 透過keycloak登入
+
+![image](https://github.com/tinawu0901/spring-security-demo/blob/main/src/main/resources/image/image.png)
+
+- 成功登入後導回自定義頁面
+
+![image](https://github.com/tinawu0901/spring-security-demo/blob/main/src/main/resources/image/Saml2UserInfo.png)
+
+
+5. Oauth2方式登入
+
+- 透過keycloak登入
+
+![image](https://github.com/tinawu0901/spring-security-demo/blob/main/src/main/resources/image/image.png)
+
+- 成功登入後導回自定義頁面
+![image](https://github.com/tinawu0901/spring-security-demo/blob/main/src/main/resources/image/Oauth2UserInfo.png)
+
+6. 成功登出頁面
+![image](https://github.com/tinawu0901/spring-security-demo/blob/main/src/main/resources/image/LogoutSuccess.png)
+
+
 
 ## 參考資料
 
@@ -51,6 +93,6 @@
 ## 代辦事項
 - [x] keycloack 及LDAP dockerfile
 - [x] 參考文件
-- [ ] 啟動畫面截圖
+- [x] 畫面截圖
 - [ ] 遇到問題
 - [ ] openID token描述
