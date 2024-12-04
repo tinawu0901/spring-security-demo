@@ -52,9 +52,9 @@ public class MultiFactorAuthController {
 
             OAuth2AuthenticatedPrincipal oauthPrincipal = (OAuth2AuthenticatedPrincipal) bearerTokenAuth.getPrincipal();
 
-
+            oauthPrincipal.getAttribute("username");
             customUser = new CustomUser(
-                    oauthPrincipal.getName(),      
+                    oauthPrincipal.getAttribute("username"),
                     null,                      
                     null,                    
                     null,                         
