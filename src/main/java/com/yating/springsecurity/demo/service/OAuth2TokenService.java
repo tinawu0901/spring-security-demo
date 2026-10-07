@@ -54,7 +54,6 @@ public class OAuth2TokenService {
             // 如果請求成功，從響應中提取新的訪問令牌
             if (response.getStatusCode() == HttpStatus.OK) {
                 String body = response.getBody();
-                log.info(body);
                 ObjectMapper objectMapper = new ObjectMapper();
                 JsonNode jsonNode = objectMapper.readTree(body);
                 return jsonNode.path("token").asText(); // 提取 token
@@ -62,7 +61,7 @@ public class OAuth2TokenService {
             }
         } catch (HttpClientErrorException e) {
             // 處理 400 錯誤或其他錯誤
-            log.error("Error refreshing access token: " + e.getStatusCode() + " - " + e.getResponseBodyAsString());
+            log.error("Error refreshing access token: " + e.getStatusCode());
         } catch (Exception e) {
             // TODO: handle exception
         }
@@ -85,11 +84,11 @@ public class OAuth2TokenService {
                 log.info("Logout successful");
                 return true;
             } else {
-                log.error("Logout failed: " + responseEntity.getBody());
+                log.error("Logout failed with status {}", responseEntity.getStatusCode());
                 return false;
             }
         } catch (Exception e) {
-            log.error("Logout failed: " + e.getMessage(), e); // 記錄錯誤堆棧跟蹤
+            log.error("Logout request failed ({})", e.getClass().getSimpleName());
             return false;
         }
     }

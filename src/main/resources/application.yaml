@@ -1,68 +1,54 @@
 spring:
   application:
     name: spring-security-demo
-  profiles:
-    active: "@runtime.env@"
   ldap:
-    url: ldap://localhost:8389
-    base: dc=example,dc=com
-    username: cn=admin,dc=example,dc=org
-    password: admin
+    urls: ${LDAP_URL:ldap://localhost:8389}
+    base: ${LDAP_BASE:dc=example,dc=org}
+    username: ${LDAP_ADMIN_DN:cn=admin,dc=example,dc=org}
+    password: ${LDAP_ADMIN_PASSWORD}
   security:
     saml2:
       relyingparty:
         registration:
-          test-oauth: 
-            identityprovider:
-              entity-id: "http://localhost:8080/realms/test-oauth"
-              verification.credentials:
-                - certificate-location: "classpath:keycloak.crt"
-              singlesignon.url: "http://localhost:8080/realms/test-oauth/protocol/saml"
-              singlesignon.sign-request: false
+          test-oauth:
             signing:
               credentials:
-                - private-key-location: "classpath:rp.key"
-                  certificate-location: "classpath:keycloak.crt"
+                - private-key-location: ${SAML_SP_PRIVATE_KEY:file:./local-secrets/rp.key}
+                  certificate-location: ${SAML_SP_CERTIFICATE:file:./local-secrets/rp.crt}
             assertingparty:
-              metadata-uri: "http://localhost:8080/realms/test-oauth/protocol/saml/descriptor"
+              metadata-uri: ${KEYCLOAK_BASE_URL:http://localhost:8080}/realms/${KEYCLOAK_REALM:test-oauth}/protocol/saml/descriptor
     oauth2:
       resourceserver:
         test-oauth:
-          issuer-uri: http://localhost:8080/realms/test-oauth
-          introspection-uri: http://localhost:8080/realms/test-oauth/protocol/openid-connect/token/introspect
-          client-id: demo-api
-          client-secret: lRGaYKkDk0IJ7Q1aWk8HgTFY2nTcI7VM
+          issuer-uri: ${KEYCLOAK_BASE_URL:http://localhost:8080}/realms/${KEYCLOAK_REALM:test-oauth}
+          introspection-uri: ${KEYCLOAK_BASE_URL:http://localhost:8080}/realms/${KEYCLOAK_REALM:test-oauth}/protocol/openid-connect/token/introspect
+          client-id: ${KEYCLOAK_CLIENT_ID:demo-api}
+          client-secret: ${KEYCLOAK_CLIENT_SECRET}
       client:
         provider:
           test-oauth:
-            issuer-uri: http://localhost:8080/realms/test-oauth
-            token-uri: http://localhost:8080/realms/test-oauth/protocol/openid-connect/token
-            user-info-uri: http://localhost:8080/realms/test-oauth/protocol/openid-connect/userinfo
-            introspection-uri: http://localhost:8080/realms/test-oauth/protocol/openid-connect/token/introspect
-            jwks_uri: http://localhost:8080/realms/test-oauth/protocol/openid-connect/certs
-            logout-uri: http://localhost:8080/realms/test-oauth/protocol/openid-connect/logout
+            issuer-uri: ${KEYCLOAK_BASE_URL:http://localhost:8080}/realms/${KEYCLOAK_REALM:test-oauth}
+            token-uri: ${KEYCLOAK_BASE_URL:http://localhost:8080}/realms/${KEYCLOAK_REALM:test-oauth}/protocol/openid-connect/token
+            user-info-uri: ${KEYCLOAK_BASE_URL:http://localhost:8080}/realms/${KEYCLOAK_REALM:test-oauth}/protocol/openid-connect/userinfo
+            logout-uri: ${KEYCLOAK_BASE_URL:http://localhost:8080}/realms/${KEYCLOAK_REALM:test-oauth}/protocol/openid-connect/logout
         registration:
           test-oauth:
             provider: test-oauth
-            client-id: demo-api
-            client-secret: lRGaYKkDk0IJ7Q1aWk8HgTFY2nTcI7VM
+            client-id: ${KEYCLOAK_CLIENT_ID:demo-api}
+            client-secret: ${KEYCLOAK_CLIENT_SECRET}
             redirect-uri: "{baseUrl}/login/oauth2/code/test-oauth"
             scope: openid,profile,email
             authorization-grant-type: authorization_code
 
-springdoc:
-  show-login-endpoint: false
-
 logging:
   level:
-    org.springframework.security: TRACE
-    org.springframework.security.saml2: TRACE
-    org.opensaml: TRACE
-
+    org.springframework.security: INFO
+    org.springframework.security.saml2: INFO
+    org.opensaml: INFO
 
 server:
-  port : 8081
+  port: ${SERVER_PORT:8081}
 
 app:
-    redirect:
-      login-url: "http://localhost:8081/user/userInfo"
+  redirect:
+    login-url: ${APP_LOGIN_URL:http://localhost:8081/user/userInfo}

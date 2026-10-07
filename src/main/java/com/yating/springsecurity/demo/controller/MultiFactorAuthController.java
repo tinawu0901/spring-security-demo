@@ -1,6 +1,5 @@
 package com.yating.springsecurity.demo.controller;
 
-import com.yating.springsecurity.demo.dto.CustomBearerTokenAuthentication;
 
 import com.yating.springsecurity.demo.dto.CustomSaml2Authentication;
 import com.yating.springsecurity.demo.dto.CustomUser;
@@ -14,7 +13,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
 import org.springframework.security.oauth2.server.resource.authentication.BearerTokenAuthentication;
-import org.springframework.security.saml2.provider.service.authentication.Saml2Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -67,7 +65,6 @@ public class MultiFactorAuthController {
             customUser = (CustomUser) authentication.getPrincipal();
         }
         if (customUser != null) {
-            log.info("CustomUser: {}", customUser);
             model.addAttribute("username", customUser.getUsername());
             model.addAttribute("useMFE", customUser.isUseMFE());
             model.addAttribute("loginMethod", customUser.getLoginMethod());
@@ -128,7 +125,6 @@ public class MultiFactorAuthController {
             model.addAttribute("error", "User not found");
             return "error"; // 返回錯誤頁面
         }
-        log.info("username:{},totpsecret is :{}",customUser.getUsername(),customUser.getTotpSecret());
         // 驗證輸入的驗證碼
         boolean isValid = gaService.isValid(customUser.getTotpSecret(), code);
         if (!isValid) {

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>User Info</title>
@@ -57,18 +57,18 @@
     <div th:if="${error}" class="error" th:text="${error}"></div>
 
     <p><strong>Username:</strong> <span th:text="${username}"></span></p>
-    <p><strong>Use MFE:</strong> <span th:text="${useMFE} ? 'Yes' : 'No'"></span></p>
+    <p><strong>TOTP enabled:</strong> <span th:text="${useMFE} ? 'Yes' : 'No'"></span></p>
     <!-- 顯示 LoginMethod -->
     <p><strong>Login Method:</strong> <span th:text="${loginMethod}"></span></p>
 
     <div th:if="${useMFE}">
-        <p>Your MFE is currently enabled. If you wish to disable it, please contact support.</p>
+        <p>TOTP is enabled for this in-memory demo account.</p>
     </div>
 
     <!-- 啟用 MFE 的表單 -->
     <form action="#" th:action="@{/enableMFE}" method="post">
         <input type="hidden" name="username" th:value="${username}"/>
-        <button type="submit" class="button">Enable MFE</button>
+        <button type="submit" class="button">Enable MFA</button>
     </form>
 
 

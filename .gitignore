@@ -35,3 +35,20 @@ build/
 ### mvnw ###
 mvnw
 mvnw.cmd
+# Local credentials and environment configuration
+local-secrets/
+.env
+.env.*
+!.env.example
+application-local.yaml
+application-local.yml
+*.key
+*.p12
+*.pfx
+*.jks
+
+# Local AI working files
+AGENTS.md
+.codex/
+codex-notes.md
+ai-notes.md

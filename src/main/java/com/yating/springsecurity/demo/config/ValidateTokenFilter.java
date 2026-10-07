@@ -60,7 +60,6 @@ public class ValidateTokenFilter extends OncePerRequestFilter {
         BearerTokenAuthenticationToken bearerToken = new BearerTokenAuthenticationToken(accessToken);
         try {
             Authentication authentication = opaqueTokenAuthenticationProvider.authenticate(bearerToken);
-            log.info("authentication:{}",authentication);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (Exception e) {
             if (refreshToken != null) {

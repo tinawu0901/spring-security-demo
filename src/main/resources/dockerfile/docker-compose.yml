@@ -1,28 +1,28 @@
-version: "3"
-
 services:
   openldap:
-    container_name: openldap
-    image: osixia/openldap:latest
+    image: osixia/openldap:1.5.0
     ports:
-      - "8389:389"  
-      - "8636:636"  
+      - "127.0.0.1:8389:389"
+      - "127.0.0.1:8636:636"
+    environment:
+      LDAP_ORGANISATION: Spring Security Demo
+      LDAP_DOMAIN: example.org
+      LDAP_ADMIN_PASSWORD: ${LDAP_ADMIN_PASSWORD:?Set LDAP_ADMIN_PASSWORD}
     volumes:
-      - ldap_storage:/data 
-    command: [--copy-service, --loglevel, debug]
+      - ldap_data:/var/lib/ldap
+      - ldap_config:/etc/ldap/slapd.d
+    command: [--copy-service]
 
   phpldapadmin:
-    container_name: phpldapadmin
-    image: osixia/phpldapadmin:latest
+    image: osixia/phpldapadmin:0.9.0
     ports:
-      - "8086:80"  
+      - "127.0.0.1:8086:80"
     environment:
-      - PHPLDAPADMIN_HTTPS="false"
-      - PHPLDAPADMIN_LDAP_HOSTS=openldap
-    links:
-      - openldap
+      PHPLDAPADMIN_HTTPS: "false"
+      PHPLDAPADMIN_LDAP_HOSTS: openldap
     depends_on:
       - openldap
 
 volumes:
-  ldap_storage:  
+  ldap_data:
+  ldap_config:

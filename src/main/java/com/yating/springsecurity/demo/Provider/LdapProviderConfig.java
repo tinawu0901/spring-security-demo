@@ -1,5 +1,6 @@
 package com.yating.springsecurity.demo.Provider;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.ldap.core.LdapTemplate;
@@ -12,6 +13,15 @@ import org.springframework.security.ldap.userdetails.LdapAuthoritiesPopulator;
 
 @Configuration
 public class LdapProviderConfig {
+    @Value("${spring.ldap.urls}")
+    private String ldapUrl;
+    @Value("${spring.ldap.base}")
+    private String baseDn;
+    @Value("${spring.ldap.username}")
+    private String adminDn;
+    @Value("${spring.ldap.password}")
+    private String adminPassword;
+
 
     /**
      * 配置 LDAP 認證提供者。
@@ -36,7 +46,6 @@ public class LdapProviderConfig {
      *
      *
      */
-    //TODO 應該要動態的
     @Bean
     public LdapAuthenticator ldapAuthenticator() {
         BindAuthenticator ldapAuthenticator = new BindAuthenticator(ldapContextSource());
@@ -70,10 +79,10 @@ public class LdapProviderConfig {
     @Bean
     public LdapContextSource ldapContextSource() {
         LdapContextSource contextSource = new LdapContextSource();
-        contextSource.setUrl("ldap://localhost:8389");
-        contextSource.setBase("dc=example,dc=org"); // 設定根節點
-        contextSource.setUserDn("cn=admin,dc=example,dc=org");
-        contextSource.setPassword("admin");
+        contextSource.setUrl(ldapUrl);
+        contextSource.setBase(baseDn); // 設定根節點
+        contextSource.setUserDn(adminDn);
+        contextSource.setPassword(adminPassword);
         return contextSource;
     }
 

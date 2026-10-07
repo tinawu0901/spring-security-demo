@@ -4,7 +4,6 @@ package com.yating.springsecurity.demo.dto;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.AuthenticatedPrincipal;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.saml2.provider.service.authentication.Saml2Authentication;
 
 import java.util.Collection;
 

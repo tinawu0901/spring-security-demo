@@ -1,8 +1,5 @@
 package com.yating.springsecurity.demo.config;
 
-import com.yating.springsecurity.demo.dto.CustomBearerTokenAuthentication;
-import com.yating.springsecurity.demo.dto.CustomUser;
-import com.yating.springsecurity.demo.enumeration.LoginMethod;
 import com.yating.springsecurity.demo.enumeration.TokenType;
 import com.yating.springsecurity.demo.util.AuthCommonUtil;
 import jakarta.servlet.ServletException;
@@ -13,17 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.Collection;
 
 @Component
 @Slf4j

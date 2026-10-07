@@ -1,7 +1,6 @@
 package com.yating.springsecurity.demo.dto;
 
 import com.yating.springsecurity.demo.enumeration.LoginMethod;
-import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
