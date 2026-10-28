@@ -1,8 +1,8 @@
 # Spring Security Demo
 
-A learning project that explores several authentication methods in one Spring Boot application: local form login, LDAP, OpenID Connect (OIDC) with Keycloak, and SAML 2.0 with Keycloak. It also includes TOTP enrolment and verification screens for in-memory demo users.
+A Spring Boot learning project for trying local form login, LDAP, and Keycloak login through OpenID Connect (OIDC) and SAML 2.0. It also has TOTP enrolment and verification screens for in-memory demo users.
 
-The aim is to understand how Spring Security authentication providers, filters, success handlers and user principals work together. This is an integration demo, not a production security solution. The TOTP screens do not yet enforce second-factor completion across all protected routes.
+The project brings authentication providers, filters, success handlers and user principals together in one application. It is a learning demo: TOTP verification is not yet required across all protected routes.
 
 ## Implemented components
 

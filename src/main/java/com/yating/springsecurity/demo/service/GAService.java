@@ -24,12 +24,10 @@ public class GAService {
     private static  final String ISSUER= "Tina";
     private final GoogleAuthenticator gAuth = new GoogleAuthenticator();
 
-    // Generate a new TOTP key
     public String generateKey() {
         return gAuth.createCredentials().getKey();
     }
 
-    // Validate the TOTP code
     public boolean isValid(String secret, int code) {
         if (secret == null || secret.isEmpty() || code < 0) {
             throw new IllegalArgumentException("Invalid TOTP secret or code.");
@@ -37,7 +35,7 @@ public class GAService {
         return gAuth.authorize(secret, code);
     }
 
-    // Generate a QR code URL for Google Authenticator
+    // Encode the otpauth URI as a PNG for the enrolment page.
     public String generateQRUrl(String secret, String username) {
         String url = GoogleAuthenticatorQRGenerator.getOtpAuthTotpURL(
                 ISSUER,
@@ -50,7 +48,6 @@ public class GAService {
         }
     }
 
-    // Generate a QR code image in Base64 format
     public static String generateQRBase64(String qrCodeText) {
         try {
             QRCodeWriter qrCodeWriter = new QRCodeWriter();

@@ -95,29 +95,23 @@ public class DemoController {
         BearerTokenAuthentication bearerTokenAuthentication = (BearerTokenAuthentication) authentication;
         String oldAccessToken = bearerTokenAuthentication.getToken().getTokenValue();
 
-        // Load OAuth2AuthorizedClient
         OAuth2AuthorizedClient authorizedClient = authorizedClientService.loadAuthorizedClient(
                 "test-oauth", bearerTokenAuthentication.getName());
 
         ClientRegistration clientRegistration = clientRegistrationRepository.findByRegistrationId("test-oauth");
         OAuth2AccessToken accessToken = new OAuth2AccessToken(OAuth2AccessToken.TokenType.BEARER, accessTokenValue, null, null);
-        // Get refresh token
         OAuth2RefreshToken refreshToken = new OAuth2RefreshToken(refreshTokenValue, null);
 
-        // Create refresh token request
         OAuth2RefreshTokenGrantRequest grantRequest = new OAuth2RefreshTokenGrantRequest(
                 clientRegistration,
                 accessToken,
-                refreshToken // Provide user principalName
+                refreshToken
         );
         DefaultRefreshTokenTokenResponseClient defaultRefreshTokenTokenResponseClient  = new DefaultRefreshTokenTokenResponseClient();
-        // Use the response client to get new access token
         OAuth2AccessTokenResponse tokenResponse = defaultRefreshTokenTokenResponseClient.getTokenResponse(grantRequest);
 
-        // Get new access token
         OAuth2AccessToken newAccessToken = tokenResponse.getAccessToken();
 
-        // Return old and new access tokens as a string
         return String.format("Old Access Token: %s\nNew Access Token: %s", oldAccessToken, newAccessToken.getTokenValue());
     }
 

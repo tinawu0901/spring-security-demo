@@ -18,11 +18,7 @@ public class AuthCommonUtil {
 
 
     /**
-     * Retrieves the value of a cookie by its name from the request.
-     *
-     * @param request the HttpServletRequest containing the cookies
-     * @param cookieName the name of the cookie to retrieve
-     * @return the value of the cookie, or null if not found
+     * Returns the named cookie's value, or null when it is absent.
      */
     public static String getCookieValue(HttpServletRequest request, String cookieName) {
         Cookie[] cookies = request.getCookies();
